@@ -1,6 +1,9 @@
-//import { Exclude } from "class-transformer";
 import { IsEmail } from "class-validator";
-import { AfterInsert, AfterRemove, AfterUpdate, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Report } from "src/reports/report.entity";
+import { 
+    AfterInsert, AfterRemove, AfterUpdate, Column, 
+    Entity, PrimaryGeneratedColumn, OneToMany 
+} from "typeorm";
 
 @Entity()
 export class User {
@@ -13,7 +16,14 @@ export class User {
 
     @Column()
     // @Exclude() //Hide password in response
-    password: string;
+    password: string;  
+
+    @Column({ default: true })
+    admin: boolean;
+    
+    //Relation with report
+    @OneToMany(() => Report, (report) => report.user)
+    reports: Report[];
 
     @AfterInsert()
     logInsert() {
